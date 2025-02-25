@@ -1,0 +1,115 @@
+﻿@model EntityLayer.EmployeeViewModel
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Employee Code</dt>
+        <dd class="col-sm-10">@Model.EmployeeCode</dd>
+
+        <dt class="col-sm-2">First Name</dt>
+        <dd class="col-sm-10">@Model.FirstName</dd>
+
+        <dt class="col-sm-2">Last Name</dt>
+        <dd class="col-sm-10">@Model.LastName</dd>
+
+        <dt class="col-sm-2">Country</dt>
+        <dd class="col-sm-10">
+            @Model.CountryId 
+        </dd>
+
+        <dt class="col-sm-2">State</dt>
+        <dd class="col-sm-10">
+            @Model.StateId // Ideally, you'd fetch and display the state name
+        </dd>
+
+        <dt class="col-sm-2">City</dt>
+        <dd class="col-sm-10">
+            @Model.CityId // Ideally, you'd fetch and display the city name
+        </dd>
+
+        <dt class="col-sm-2">Email Address</dt>
+        <dd class="col-sm-10">@Model.EmailAddress</dd>
+
+        <dt class="col-sm-2">Mobile Number</dt>
+        <dd class="col-sm-10">@Model.MobileNumber</dd>
+
+        <dt class="col-sm-2">PAN Number</dt>
+        <dd class="col-sm-10">@Model.PanNumber</dd>
+
+        <dt class="col-sm-2">Passport Number</dt>
+        <dd class="col-sm-10">@Model.PassportNumber</dd>
+
+        <dt class="col-sm-2">Profile Image</dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.ProfileImage))
+            {
+                <img src="@Url.Content("~/images/" + Model.ProfileImage)" alt="Profile Image" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" />
+            }
+            else
+            {
+                <p>No image available</p>
+            }
+        </dd>
+
+        <dt class="col-sm-2">Gender</dt>
+        <dd class="col-sm-10">
+            @if (Model.Gender.HasValue)
+            {
+                switch (Model.Gender)
+                {
+                    case 0:
+                        <span>Male</span>
+                        break;
+                    case 1:
+                        <span>Female</span>
+                        break;
+                    case 2:
+                        <span>Other</span>
+                        break;
+                    default:
+                        <span>Unknown</span>
+                        break;
+                }
+            }
+            else
+            {
+                <span>Not specified</span>
+            }
+        </dd>
+
+        <dt class="col-sm-2">Is Active</dt>
+        <dd class="col-sm-10">
+            @(Model.IsActive ? "Yes" : "No")
+        </dd>
+
+        <dt class="col-sm-2">Date of Birth</dt>
+        <dd class="col-sm-10">@Model.DateOfBirth.ToString("d")</dd>
+
+        <dt class="col-sm-2">Date of Joinee</dt>
+        <dd class="col-sm-10">@Model.DateOfJoinee?.ToString("d") ?? "N/A"</dd>
+
+        <dt class="col-sm-2">Created Date</dt>
+        <dd class="col-sm-10">@Model.CreatedDate.ToString("f")</dd>
+
+        <dt class="col-sm-2">Updated Date</dt>
+        <dd class="col-sm-10">@Model.UpdatedDate?.ToString("f") ?? "N/A"</dd>
+
+        <dt class="col-sm-2">Is Deleted</dt>
+        <dd class="col-sm-10">
+            @(Model.IsDeleted ? "Yes" : "No")
+        </dd>
+
+        <dt class="col-sm-2">Deleted Date</dt>
+        <dd class="col-sm-10">@Model.DeletedDate?.ToString("f") ?? "N/A"</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.RowId" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

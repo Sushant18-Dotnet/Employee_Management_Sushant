@@ -1,0 +1,171 @@
+﻿@model EntityLayer.EmployeeViewModel
+
+@{
+    ViewData["Title"] = "Edit Employee";
+}
+
+@* <h2>@ViewData["Title"]</h2> *@
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="EmployeeCode" class="control-label"></label>
+        <input asp-for="EmployeeCode" class="form-control" readonly />
+        <span asp-validation-for="EmployeeCode" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="FirstName" class="control-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName" class="control-label"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CountryId" class="control-label"></label>
+        <select asp-for="CountryId" id="CountryId" asp-items="ViewBag.Countries" class="form-control">
+            <option value="">Select Country</option>
+        </select>
+        <span asp-validation-for="CountryId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StateId" class="control-label"></label>
+        <select asp-for="StateId" id="StateId" asp-items="ViewBag.StateList" class="form-control">
+            <option value="">Select State</option>
+        </select>
+        <span asp-validation-for="StateId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CityId" class="control-label"></label>
+        <select asp-for="CityId" id="CityId" asp-items="ViewBag.CityList" class="form-control">
+            <option value="">Select City</option>
+        </select>
+        <span asp-validation-for="CityId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmailAddress" class="control-label"></label>
+        <input asp-for="EmailAddress" class="form-control" />
+        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MobileNumber" class="control-label"></label>
+        <input asp-for="MobileNumber" class="form-control" />
+        <span asp-validation-for="MobileNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PanNumber" class="control-label"></label>
+        <input asp-for="PanNumber" class="form-control" />
+        <span asp-validation-for="PanNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PassportNumber" class="control-label"></label>
+        <input asp-for="PassportNumber" class="form-control" />
+        <span asp-validation-for="PassportNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ProfileImage" class="control-label"></label>
+        <input asp-for="ProfileImage" type="file" class="form-control" />
+        <span asp-validation-for="ProfileImage" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Gender" class="control-label"></label>
+        <select asp-for="Gender" class="form-control">
+            <option value="">Select Gender</option>
+          
+            <option value="">Male</option>
+            <option value="">Female</option>
+            <option value="">Other</option>
+        </select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="IsActive" class="control-label"></label>
+        <input asp-for="IsActive" type="checkbox" />
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DateOfBirth" class="control-label"></label>
+        <input asp-for="DateOfBirth" class="form-control" type="date" />
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DateOfJoinee" class="control-label"></label>
+        <input asp-for="DateOfJoinee" class="form-control" type="date" />
+        <span asp-validation-for="DateOfJoinee" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DeletedDate" class="control-label"></label>
+        <input asp-for="DeletedDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="DeletedDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#CountryId').change(function () {
+                var countryId = $(this).val();
+                if (countryId) {
+                    $.ajax({
+                        url: '@Url.Action("GetStatesByCountry")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { countryId: countryId },
+                        success: function (data) {
+                            var $stateDropdown = $('#StateId');
+                            $stateDropdown.empty();
+                            $stateDropdown.append('<option value="">Select State</option>');
+                            $.each(data, function (index, state) {
+                                $stateDropdown.append('<option value="' + state.row_Id + '">' + state.stateName + '</option>');
+                            });
+                            $('#CityId').empty().append('<option value="">Select City</option>'); // Clear city dropdown
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("An error occurred while retrieving states:", error);
+                            alert("Failed to load states. Please try again.");
+                        }
+                    });
+                } else {
+                    $('#StateId').empty().append('<option value="">Select State</option>');
+                    $('#CityId').empty().append('<option value="">Select City</option>');
+                }
+            });
+
+            $('#StateId').change(function () {
+                var stateId = $(this).val();
+                if (stateId) {
+                    $.ajax({
+                        url: '@Url.Action("GetCitiesByState")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { stateId: stateId },
+                        success: function (data) {
+                            var $cityDropdown = $('#CityId');
+                            $cityDropdown.empty();
+                            $cityDropdown.append('<option value="">Select City</option>');
+                            $.each(data, function (index, city) {
+                                $cityDropdown.append('<option value="' + city.row_Id + '">' + city.cityName + '</option>');
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("An error occurred while retrieving cities:", error);
+                            alert("Failed to load cities. Please try again.");
+                        }
+                    });
+                } else {
+                    $('#CityId').empty().append('<option value="">Select City</option>');
+                }
+            });
+
+            // Pre-select country, state, and city based on model values
+            $('#CountryId').val('@Model.CountryId');
+            $('#StateId').val('@Model.StateId');
+            $('#CityId').val('@Model.CityId');
+        });
+    </script>
+}

@@ -1,0 +1,185 @@
+﻿@model IEnumerable<EntityLayer.EmployeeMasters>
+
+@{
+    ViewBag.Title = "Employee Index";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <style>
+        body {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1200px;
+        }
+
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 2px solid #dee2e6; /* Thick border around table */
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            background-color: #ffffff;
+        }
+
+            .table th,
+            .table td {
+                border: 1px solid #dee2e6;
+                padding: 15px;
+            }
+
+            .table thead th {
+                background-color: #007bff;
+                color: white;
+                text-align: center;
+                font-weight: bold;
+            }
+
+            .table tbody td {
+                text-align: center;
+            }
+
+        .btn {
+            margin-right: 5px;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+
+      /*   .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+ */
+        .profile-img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 0.25rem;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Shadow for image */
+        }
+
+        .action-links {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Space between buttons */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Employee Index</h2>
+
+        <div class="mb-3 text-center">
+            @Html.ActionLink("Create New Employee", "Create", "Employee", null, new { @class = "btn btn-primary" })
+        </div>
+
+
+        <table class="table table-striped table-hover" id="MyTable">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.First().EmployeeCode)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().FirstName)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().LastName)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().DateOfBirth)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().EmailAddress)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().PanNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().PassportNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().CountryName)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().stateName)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().cityName)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().Gender)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().IsActive)</th>
+                    <th>@Html.DisplayNameFor(model => model.First().ProfileImage)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr id="row_@item.Row_Id">
+                        
+                        <td>@Html.DisplayFor(modelItem => item.EmployeeCode)</td>
+                        <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DateOfBirth)</td>
+                        <td>@Html.DisplayFor(modelItem => item.EmailAddress)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PanNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PassportNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CountryName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.stateName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.cityName)</td>
+                         <td>@Html.DisplayFor(modelItem => item.Gender)</td> 
+                        
+                        
+                        <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                        <td>
+                            <img src='@Url.Content(item.ProfileImage)' class="profile-img" alt="Profile Image" />
+                        </td>
+                        <td>
+                            <div class="action-links">
+                                @Html.ActionLink("Edit", "Edit","Employee", new { id = @item.Row_Id }, new { @class = "btn btn-primary btn-sm" })
+                                <a class="btn btn-primary  href="#" onclick="confirmDelete(@item.Row_Id); return false;">Delete</a>
+                                <a asp-action="Details" asp-route-id="@item.Row_Id">Details</a>
+                            </div>
+                      
+                        </td>
+
+
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                order: [[0, 'desc']],
+                columnDefs: [{
+                    targets: [13],
+                    orderable: false,
+                }]
+            });
+        });
+
+        function confirmDelete(employeeId) {
+            if (confirm("Are you sure you want to delete this employee?")) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete", "Employee")',
+                    data: { id: employeeId },
+                    success: function () {
+                        $('#row_' + employeeId).remove();
+                        alert("Employee deleted successfully.");
+                    },
+                    error: function () {
+                        alert("An error occurred while deleting the employee.");
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
